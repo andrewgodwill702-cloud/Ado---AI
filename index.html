@@ -94,89 +94,89 @@
         </div>
     </main>
 
-  <script>
-    const chatWindow = document.getElementById('chat-window');
-    const userInput = document.getElementById('userInput');
-    const hero = document.getElementById('hero');
+ <script>
+const chatWindow = document.getElementById('chat-window');
+const userInput = document.getElementById('userInput');
+const hero = document.getElementById('hero');
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('overlay').classList.toggle('active');
-    }
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
 
-    function autoResize(el) {
-        el.style.height = 'auto';
-        el.style.height = (el.scrollHeight) + 'px';
-    }
+function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = (el.scrollHeight) + 'px';
+}
 
-    function formatAIResponse(text) {
-        const codeRegex = /```([\s\S]*?)```/g;
-        return text.replace(codeRegex, (match, code) => {
-            return `<pre><code>${code.trim()}</code></pre>`;
-        });
-    }
-
-    function addMessage(text, type) {
-        if (hero) hero.style.display = 'none';
-        const container = document.createElement('div');
-        container.className = `msg-container ${type}-container`;
-
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `msg ${type}`;
-
-        if (type === 'ai') {
-            msgDiv.innerHTML = formatAIResponse(text);
-            const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
-            btn.onclick = () => {
-                navigator.clipboard.writeText(text);
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
-                setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 2000);
-            };
-            container.appendChild(msgDiv);
-            container.appendChild(btn);
-        } else {
-            msgDiv.textContent = text;
-            container.appendChild(msgDiv);
-        }
-
-        chatWindow.appendChild(container);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    async function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text) return;
-        addMessage(text, 'user');
-        userInput.value = '';
-        userInput.style.height = 'auto';
-
-        try {
-            // ✅ Only backend link updated (Railway)
-            const response = await fetch('https://ado-ai-production.up.railway.app/ask', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question: text })
-            });
-            const data = await response.json();
-            addMessage(data.answer, 'ai');
-        } catch (error) {
-            addMessage('⚠️ Connection error.', 'ai');
-            console.error(error);
-        }
-    }
-
-    userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
+function formatAIResponse(text) {
+    const codeRegex = /```([\s\S]*?)```/g;
+    return text.replace(codeRegex, (match, code) => {
+        return `<pre><code>${code.trim()}</code></pre>`;
     });
-</script>
+}
 
+function addMessage(text, type) {
+    if (hero) hero.style.display = 'none';
+    const container = document.createElement('div');
+    container.className = `msg-container ${type}-container`;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `msg ${type}`;
+
+    if (type === 'ai') {
+        msgDiv.innerHTML = formatAIResponse(text);
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+        btn.onclick = () => {
+            navigator.clipboard.writeText(text);
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+            setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 2000);
+        };
+        container.appendChild(msgDiv);
+        container.appendChild(btn);
+    } else {
+        msgDiv.textContent = text;
+        container.appendChild(msgDiv);
+    }
+
+    chatWindow.appendChild(container);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    userInput.value = '';
+    userInput.style.height = 'auto';
+
+    try {
+        // ✅ Backend link updated to Railway
+        const response = await fetch('https://ado-ai-production.up.railway.app/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: text })
+        });
+        const data = await response.json();
+        addMessage(data.answer, 'ai');
+    } catch (error) {
+        addMessage('⚠️ Connection error.', 'ai');
+        console.error(error);
+    }
+}
+
+userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+</script>
 
 </body>
 
 </html>
+
 
