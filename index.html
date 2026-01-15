@@ -127,7 +127,6 @@ function addMessage(text, type) {
 
     if (type === 'ai') {
         msgDiv.innerHTML = formatAIResponse(text);
-        // Copy button
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
@@ -155,8 +154,8 @@ async function sendMessage() {
     userInput.style.height = 'auto';
 
     try {
-        // ✅ Updated backend link (Railway)
-        const response = await fetch('https://ado-ai-production.up.railway.app/ask', {
+        // ✅ Updated backend link (LAN IP of your PC)
+        const response = await fetch('http://10.155.78.113:5000/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question: text })
@@ -179,6 +178,7 @@ userInput.addEventListener('keydown', (e) => {
 </body>
 
 </html>
+
 
 
 
