@@ -94,7 +94,7 @@
         </div>
     </main>
 
- <script>
+<script>
 const chatWindow = document.getElementById('chat-window');
 const userInput = document.getElementById('userInput');
 const hero = document.getElementById('hero');
@@ -109,6 +109,7 @@ function autoResize(el) {
     el.style.height = (el.scrollHeight) + 'px';
 }
 
+// Detect code blocks and format
 function formatAIResponse(text) {
     const codeRegex = /```([\s\S]*?)```/g;
     return text.replace(codeRegex, (match, code) => {
@@ -126,6 +127,7 @@ function addMessage(text, type) {
 
     if (type === 'ai') {
         msgDiv.innerHTML = formatAIResponse(text);
+        // Copy button
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
@@ -153,7 +155,7 @@ async function sendMessage() {
     userInput.style.height = 'auto';
 
     try {
-        // ✅ Backend link updated to Railway
+        // ✅ Updated backend link (Railway)
         const response = await fetch('https://ado-ai-production.up.railway.app/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -163,7 +165,6 @@ async function sendMessage() {
         addMessage(data.answer, 'ai');
     } catch (error) {
         addMessage('⚠️ Connection error.', 'ai');
-        console.error(error);
     }
 }
 
@@ -178,5 +179,6 @@ userInput.addEventListener('keydown', (e) => {
 </body>
 
 </html>
+
 
 
