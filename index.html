@@ -173,10 +173,32 @@ userInput.addEventListener('keydown', (e) => {
         sendMessage();
     }
 });
+
+  async function sendPrompt() {
+    const prompt = document.getElementById("promptInput").value;
+    const responseBox = document.getElementById("responseBox");
+
+    try {
+      const res = await fetch("https://ado-ai-production.up.railway.app/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: prompt })
+      });
+
+      const data = await res.text(); // au .json() kama backend inarudisha JSON
+      responseBox.innerText = data;
+    } catch (error) {
+      responseBox.innerText = "Error: " + error.message;
+    }
+  }
+
 </script>
 </body>
 
 </html>
+
 
 
 
